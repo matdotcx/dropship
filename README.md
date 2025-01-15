@@ -18,6 +18,9 @@ A simple yet powerful file transfer utility that makes it easy to send files and
 # Clone the repository
 git clone https://github.com/matdotcx/dropship.git
 
+# Make it executable
+chmod +x install_drop.sh
+
 # Run the installation script
 ./install_drop.sh
 ```
