@@ -332,9 +332,15 @@ find_next_increment() {
     done
 }
 
-# Perform the transfer with progress using rsync
+# Check SSH connectivity first before attempting transfer
 echo "Starting transfer to $user@$host:$dest_path"
 echo
+
+# Test SSH connection first
+if ! ssh -q -o BatchMode=yes -o ConnectTimeout=5 "$user@$host" "echo 'Connection successful'"; then
+    echo -e "${RED}[ERROR] Cannot connect to $host: SSH connection failed${NC}"
+    exit 1
+fi
 
 if [ -d "$path" ]; then
     # If it's a directory, check if it exists
@@ -402,10 +408,10 @@ fi
 transfer_status=$?
 
 if [ $transfer_status -eq 0 ]; then
-    echo "[SUCCESS] Transfer completed successfully"
+    echo -e "${GREEN}[SUCCESS] Transfer completed successfully${NC}"
     exit 0
 else
-    echo "[ERROR] Transfer failed with status: $transfer_status"
+    echo -e "${RED}[ERROR] Transfer failed with status: $transfer_status${NC}"
     exit 1
 fi
 EOF
